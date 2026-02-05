@@ -18,10 +18,10 @@ export default function Attribution() {
               className="hover:opacity-80 transition-opacity"
             >
               <Image
-                src="/tmdb-logo.svg"
+                src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_long_2-9665a76b1ae401a510ec1e0ca40ddcb3b0cfe45f1d51b77a308fea0845885648.svg"
                 alt="The Movie Database (TMDB) Logo"
-                width={60}
-                height={60}
+                width={200}
+                height={80}
                 priority
               />
             </a>
