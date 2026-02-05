@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { Movie, MovieSheet, TMDBMovieDetails } from '@/types/movie';
 import languages from '@/data/languages.json';
 import { getTMDBCache, setTMDBCache } from './tmdbCache';
@@ -385,8 +386,9 @@ function getLanguageName(language: string): string {
 /**
  * Fetches movie data from Google Sheets using the Google Visualization API
  * This method doesn't require authentication
+ * Wrapped with React cache() for request deduplication
  */
-export async function fetchMoviesFromSheet(
+async function fetchMoviesFromSheetImpl(
   category: keyof typeof SHEET_RANGES
 ): Promise<Movie[]> {
   const range = SHEET_RANGES[category];
@@ -459,8 +461,9 @@ export async function fetchMoviesFromSheet(
 
 /**
  * Fetches all movie categories
+ * Wrapped with React cache() for request deduplication
  */
-export async function fetchAllMovies(): Promise<MovieSheet[]> {
+async function fetchAllMoviesImpl(): Promise<MovieSheet[]> {
   const categories = Object.keys(SHEET_RANGES) as Array<
     keyof typeof SHEET_RANGES
   >;
@@ -482,3 +485,15 @@ export async function fetchAllMovies(): Promise<MovieSheet[]> {
 function getCategoryTitle(category: keyof typeof SHEET_RANGES): string {
   return categoryConfigMap[category]?.title ?? category;
 }
+
+/**
+ * Cached wrapper for fetchMoviesFromSheet
+ * Deduplicates requests within the same render
+ */
+export const fetchMoviesFromSheet = cache(fetchMoviesFromSheetImpl);
+
+/**
+ * Cached wrapper for fetchAllMovies
+ * Deduplicates requests within the same render
+ */
+export const fetchAllMovies = cache(fetchAllMoviesImpl);
