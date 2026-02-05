@@ -13,6 +13,7 @@ import {
 /**
  * Clear all application cache from browser
  * Only clears app-specific caches, not all browser caches
+ * Note: ISR cache (server-side) will expire after 5 minutes or when data is stale
  */
 export async function clearApplicationCache(): Promise<void> {
   try {
@@ -32,6 +33,7 @@ export async function clearApplicationCache(): Promise<void> {
     }
 
     console.log('✓ All application caches cleared successfully');
+    console.log('ℹ Note: Server-side ISR cache will auto-revalidate in 5 minutes');
   } catch (error) {
     console.error('Error clearing cache:', error);
     throw error;
