@@ -156,16 +156,40 @@ If you want different columns, update:
 
 This project uses **The Movie Database (TMDB) API** for fetching movie poster images and data.
 
-> This product uses the TMDB API but is not endorsed or certified by TMDB.
+### Required TMDB Attribution
 
-If you use TMDB data or images in your deployment, please follow their [attribution guidelines](https://www.themoviedb.org/about/logos-attribution). The app includes an attribution footer by default.
+> **This product uses the TMDB API but is not endorsed or certified by TMDB.**
 
-### Using TMDB Responsibly
+TMDB's terms of use require proper attribution whenever their data or images are used. This project includes:
+
+✅ **Attribution Footer**: Displays on every page with links to TMDB  
+✅ **Image Attribution**: Hover tooltip on movie posters showing "Image from TMDB"  
+✅ **Clear Disclaimers**: Legal disclaimer that the app is not endorsed by TMDB  
+✅ **Link to Guidelines**: Direct link to TMDB's official attribution guidelines  
+
+### TMDB Brand Guidelines
+
+When deploying or modifying this app, follow [TMDB's official attribution guidelines](https://www.themoviedb.org/about/logos-attribution):
+
+- Always credit TMDB as the data source
+- Use official TMDB logos if available (get them from the link above)
+- Don't imply endorsement by TMDB
+- Respect their rate limits and API terms
+- Include appropriate disclaimers
+
+### If You Deploy This App
+
+1. Ensure the Attribution footer remains visible
+2. Download TMDB logos from their [logos & attribution page](https://www.themoviedb.org/about/logos-attribution)
+3. Consider adding the TMDB logo to your deployment
+4. Follow their brand guidelines for logo placement and spacing
+
+### API Terms
 
 - **Personal Use**: Free tier is perfect for personal projects
-- **Attribution**: Always credit TMDB when using their data
-- **Logo Usage**: See [TMDB Attribution Guidelines](https://www.themoviedb.org/about/logos-attribution) for proper logo usage
-- **API Terms**: Respect their rate limits and terms of service
+- **Rate Limits**: Respect TMDB's API rate limits (typically 40 requests/10 seconds)
+- **Commercial Use**: Contact TMDB for commercial licensing
+- **Attribution**: Always required, regardless of use case
 
 ## Notes
 
