@@ -375,7 +375,14 @@ export async function fetchMoviesFromSheet(
   category: keyof typeof SHEET_RANGES
 ): Promise<Movie[]> {
   const range = SHEET_RANGES[category];
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&range=${range}`;
+  const sheetName = range.split('!')[0];
+  const queryParams = new URLSearchParams({
+    sheet: sheetName,
+    headers: '1',
+    tq: 'select A,B,C,D,E,F',
+    tqx: 'out:json',
+  });
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?${queryParams.toString()}`;
 
   try {
     const response = await fetch(url, {
