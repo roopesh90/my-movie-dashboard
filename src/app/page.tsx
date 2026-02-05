@@ -1,5 +1,6 @@
 import { fetchAllMovies } from '@/lib/sheets';
 import MovieList from '@/components/MovieList';
+import { categoryConfigMap } from '@/lib/categoryConfig';
 
 const SITE_OWNER = process.env.NEXT_PUBLIC_SITE_OWNER || 'My';
 
@@ -21,11 +22,18 @@ export default async function Home() {
       </div>
 
       <div className="space-y-16">
-        {movieSheets.map((sheet) => (
-          <section key={sheet.category} id={sheet.category}>
-            <MovieList movies={sheet.movies} title={sheet.title} />
-          </section>
-        ))}
+        {movieSheets.map((sheet) => {
+          const config = categoryConfigMap[sheet.category];
+          return (
+            <section key={sheet.category} id={sheet.category}>
+              <MovieList
+                movies={sheet.movies}
+                title={config?.title ?? sheet.title}
+                category={config}
+              />
+            </section>
+          );
+        })}
       </div>
     </div>
   );
