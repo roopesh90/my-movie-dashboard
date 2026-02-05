@@ -8,6 +8,7 @@ export const revalidate = 300; // ISR: Revalidate every 5 minutes
 
 export default async function Home() {
   const movieSheets = await fetchAllMovies();
+  const totalMovies = movieSheets.reduce((sum, sheet) => sum + sheet.movies.length, 0);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -15,8 +16,15 @@ export default async function Home() {
         <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
           🎬 {SITE_OWNER}&apos;s Movie Archive
         </h1>
-        <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-          A personal collection of movies I&apos;ve watched and loved (or not).
+        <div className="flex items-center justify-center gap-3 mb-4">
+          <p className="text-lg text-gray-600 dark:text-gray-400">
+            A personal collection of movies I&apos;ve watched and loved (or not).
+          </p>
+          <span className="inline-flex items-center px-4 py-2 rounded-full text-lg font-bold bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-gray-100">
+            {totalMovies} movies
+          </span>
+        </div>
+        <p className="text-sm text-gray-500 dark:text-gray-500">
           Browse by category to see what I recommend.
         </p>
       </div>
