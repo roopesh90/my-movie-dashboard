@@ -1,29 +1,39 @@
 'use client';
 
 import { useState } from 'react';
-import { clearApplicationCache, clearImageCache } from '@/lib/cache';
+import { clearApplicationCache, clearImageCache, clearTMDBAPICache } from '@/lib/cache';
 
 export default function ClearCacheButton() {
   const [isClearing, setIsClearing] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-  const handleClearCache = async (cacheType: 'all' | 'images') => {
+  const handleClearCache = async (cacheType: 'all' | 'images' | 'tmdb') => {
     setIsClearing(true);
     setMessage(null);
 
     try {
       if (cacheType === 'all') {
         await clearApplicationCache();
+        clearTMDBAPICache(); // Also clear TMDB cache
         setMessage({ type: 'success', text: '✓ All caches cleared!' });
-      } else {
+      } else if (cacheType === 'images') {
         await clearImageCache();
         setMessage({ type: 'success', text: '✓ Image cache cleared!' });
+      } else if (cacheType === 'tmdb') {
+        clearTMDBAPICache();
+        setMessage({ type: 'success', text: '✓ TMDB cache cleared!' });
+        // Refresh after clearing TMDB cache to fetch fresh data
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
       }
 
-      // Refresh the page after a short delay
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
+      // Refresh the page after a short delay for 'all' and 'images'
+      if (cacheType !== 'tmdb') {
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
+      }
     } catch (error) {
       setMessage({
         type: 'error',
@@ -36,13 +46,22 @@ export default function ClearCacheButton() {
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex gap-2">
+      <div className="flex gap-2 flex-wrap">
         <button
           onClick={() => handleClearCache('images')}
           disabled={isClearing}
           className="px-3 py-2 text-sm font-medium text-white bg-blue-600 dark:bg-blue-700 hover:bg-blue-700 dark:hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed rounded transition-colors"
         >
           {isClearing ? 'Clearing...' : 'Clear Image Cache'}
+        </button>
+
+        <button
+          onClick={() => handleClearCache('tmdb')}
+          disabled={isClearing}
+          className="px-3 py-2 text-sm font-medium text-white bg-purple-600 dark:bg-purple-700 hover:bg-purple-700 dark:hover:bg-purple-600 disabled:opacity-50 disabled:cursor-not-allowed rounded transition-colors"
+          title="Clear TMDB API response cache"
+        >
+          {isClearing ? 'Clearing...' : 'Clear TMDB Cache'}
         </button>
 
         <button
