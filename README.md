@@ -231,6 +231,40 @@ When deploying or modifying this app, follow [TMDB's official attribution guidel
 - **Commercial Use**: Contact TMDB for commercial licensing
 - **Attribution**: Always required, regardless of use case
 
+## Versioning
+
+The app follows [Semantic Versioning](https://semver.org/) (MAJOR.MINOR.PATCH):
+
+### Version Management
+
+**Bump version:**
+```bash
+npm run version:patch  # Bug fixes (1.0.0 → 1.0.1)
+npm run version:minor  # New features (1.0.0 → 1.1.0)
+npm run version:major  # Breaking changes (1.0.0 → 2.0.0)
+```
+
+**Manual sync (if needed):**
+```bash
+./sync-version.sh
+```
+
+### Version Display
+
+- **Footer**: Version appears in the Attribution footer on all pages
+- **Build Logs**: Version and build time logged during `npm run build`
+- **Server Logs**: Version logged on server startup
+- **Source**: Version managed in `package.json` and synced to `src/lib/version.ts`
+
+### Build Time Tracking
+
+The build script automatically captures the build timestamp:
+```bash
+npm run build  # Sets BUILD_TIME env variable
+```
+
+Build time is included in server logs and can be accessed via `getVersionInfo()` in code.
+
 ## Notes
 
 - The app fetches fresh data from Google Sheets on every page load (`revalidate: 0`)

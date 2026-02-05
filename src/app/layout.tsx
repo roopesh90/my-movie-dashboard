@@ -4,6 +4,12 @@ import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Attribution from "@/components/Attribution";
 import CacheCleanup from "@/components/CacheCleanup";
+import { logVersion } from "@/lib/version";
+
+// Log version on server startup
+if (typeof window === 'undefined') {
+  logVersion();
+}
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

@@ -2,6 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  env: {
+    BUILD_TIME: process.env.BUILD_TIME || new Date().toISOString(),
+  },
   // Cache images for 10 days (864000 seconds)
   headers: async () => {
     return [
