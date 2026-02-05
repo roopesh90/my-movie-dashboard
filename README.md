@@ -59,7 +59,7 @@ Create a `.env` file by copying `.env.example`:
    NEXT_PUBLIC_SITE_OWNER=Your Name
    ```
 
-3. If your sheet tab names are different, update the `SHEET_RANGES` in `src/lib/sheets.ts`
+3. If your sheet tab names are different, update them in `src/data/categories.json`
 
 ### 3. TMDB Media (Optional)
 
@@ -81,7 +81,7 @@ Create a `.env` file by copying `.env.example`:
 - Add URLs manually where you want specific images
 - Leave blank for others and TMDB will auto-fill them
 - Get the best of both approaches!
-3. If your sheet tab names are different, update the `SHEET_RANGES` object
+
 
 ### 3. Install Dependencies
 
