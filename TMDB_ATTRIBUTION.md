@@ -1,6 +1,6 @@
 # TMDB Attribution & Brand Guidelines
 
-This project uses data and images from **The Movie Database (TMDB)** API.
+This project uses data, videos, and images from **The Movie Database (TMDB)** API.
 
 ## Legal Requirements
 
@@ -57,6 +57,10 @@ Always include text like:
 - "Data provided by The Movie Database"
 
 Include a link to: https://www.themoviedb.org
+
+## Authentication Note
+
+Use the **API Read Access Token** (Bearer token) from TMDB, not the v3 API key.
 
 ## For Commercial Use
 

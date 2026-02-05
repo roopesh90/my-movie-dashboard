@@ -12,6 +12,7 @@ A personal movie archive dashboard that fetches data from Google Sheets and disp
 - 🚀 Built with Next.js 14 App Router
 - ⚡ TypeScript for type safety
 - 🖼️ Movie poster images (from sheet or TMDB)
+- 🎞️ Media carousel with trailers and stills (TMDB videos + images)
 - ⚡ 10-day browser caching for movie images
 - 🧹 Built-in cache management tools
 
@@ -54,12 +55,13 @@ Create a `.env` file by copying `.env.example`:
 2. Update `.env` with your configuration:
    ```
    NEXT_PUBLIC_SHEET_ID=your_actual_sheet_id
-   NEXT_PUBLIC_TMDB_API_KEY=optional_tmdb_api_key
+   NEXT_PUBLIC_TMDB_API_KEY=your_tmdb_bearer_token
+   NEXT_PUBLIC_SITE_OWNER=Your Name
    ```
 
 3. If your sheet tab names are different, update the `SHEET_RANGES` in `src/lib/sheets.ts`
 
-### 3. Movie Images (Optional)
+### 3. TMDB Media (Optional)
 
 **Option A: Manual Images (Recommended)**
 - Add image URLs directly in the "Image" column (F) of your Google Sheet
@@ -70,9 +72,10 @@ Create a `.env` file by copying `.env.example`:
 
 **Option B: Auto-fetch from TMDB**
 - Sign up for free at https://www.themoviedb.org/settings/api
-- Add your API key to `.env`: `NEXT_PUBLIC_TMDB_API_KEY=your_key`
+- Use the **API Read Access Token** (Bearer token), not the v3 API key
+- Add your token to `.env`: `NEXT_PUBLIC_TMDB_API_KEY=your_bearer_token`
 - Leave the Image column empty and the app will auto-fetch posters
-- The app searches by movie name, so accuracy depends on exact titles
+- The app searches by movie name, language, and year for better accuracy
 
 **Option C: Hybrid (Best of Both)**
 - Add URLs manually where you want specific images
@@ -231,7 +234,8 @@ When deploying or modifying this app, follow [TMDB's official attribution guidel
 ## Notes
 
 - The app fetches fresh data from Google Sheets on every page load (`revalidate: 0`)
-- TMDB image fetching is automatic and optional
+- TMDB enrichment is optional and uses Bearer token auth
+- Language codes are converted to readable names in the UI
 - Perfect for personal use and sharing with friends/family
 - Includes proper TMDB attribution footer
 

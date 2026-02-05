@@ -1,13 +1,13 @@
 <!-- Movie Dashboard Project Instructions -->
 - [x] Verify that the copilot-instructions.md file in the .github directory is created.
 - [x] Clarify Project Requirements - Next.js 14 with TypeScript, Tailwind, Framer Motion for personal movie archive
-- [ ] Scaffold the Project
-- [ ] Customize the Project
-- [ ] Install Required Extensions
-- [ ] Compile the Project
-- [ ] Create and Run Task
-- [ ] Launch the Project
-- [ ] Ensure Documentation is Complete
+- [x] Scaffold the Project
+- [x] Customize the Project
+- [x] Install Required Extensions
+- [x] Compile the Project
+- [x] Create and Run Task
+- [x] Launch the Project
+- [x] Ensure Documentation is Complete
 
 ## Project Context
 Personal movie archive dashboard fetching data from Google Sheets with 4 categories:

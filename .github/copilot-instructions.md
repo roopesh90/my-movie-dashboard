@@ -20,6 +20,7 @@ Target audience: Personal use, friends and family
 Data columns: Name, Language, Year, Theme, Comment
 
 ## Next Steps
-1. Configure your Google Sheet ID in src/lib/sheets.ts
-2. Run `npm run dev` to start the development server
-3. Deploy to Vercel for hosting
+1. Copy `.env.example` to `.env` and set `NEXT_PUBLIC_SHEET_ID`
+2. (Optional) Set `NEXT_PUBLIC_TMDB_API_KEY` to your TMDB Bearer token
+3. Run `npm run dev` to start the development server
+4. Deploy to Vercel for hosting
