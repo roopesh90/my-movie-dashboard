@@ -21,10 +21,17 @@ export default function MovieList({ movies, title, category }: MovieListProps) {
   return (
     <div>
       <div className="mb-6">
-        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          {title}
-        </h2>
-        <p className="text-gray-600 dark:text-gray-400">
+        <div className="flex items-center gap-4 mb-2">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+            {title}
+          </h2>
+          {title && (
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300">
+              {movies.length}
+            </span>
+          )}
+        </div>
+        <p className="text-gray-600 dark:text-gray-400 text-sm">
           {movies.length} {movies.length === 1 ? 'movie' : 'movies'}
         </p>
       </div>
