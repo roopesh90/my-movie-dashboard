@@ -17,7 +17,7 @@ export default async function OutstandingPage() {
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
             {categoryConfigMap.outstanding.title}
           </h1>
-          <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
+          <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-bold ${categoryConfigMap.outstanding.tagClass}`}>
             {movies.length}
           </span>
         </div>

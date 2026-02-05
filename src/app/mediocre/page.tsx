@@ -17,7 +17,7 @@ export default async function MediocrePage() {
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
             {categoryConfigMap.mediocre.title}
           </h1>
-          <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-100">
+          <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-bold ${categoryConfigMap.mediocre.tagClass}`}>
             {movies.length}
           </span>
         </div>

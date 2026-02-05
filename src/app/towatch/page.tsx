@@ -17,7 +17,7 @@ export default async function ToWatchPage() {
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
             {categoryConfigMap.towatch.title}
           </h1>
-          <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-100">
+          <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-bold ${categoryConfigMap.towatch.tagClass}`}>
             {movies.length}
           </span>
         </div>

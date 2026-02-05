@@ -17,7 +17,7 @@ export default async function ShitPage() {
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
             {categoryConfigMap.shit.title}
           </h1>
-          <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100">
+          <span className={`inline-flex items-center px-4 py-2 rounded-full text-sm font-bold ${categoryConfigMap.shit.tagClass}`}>
             {movies.length}
           </span>
         </div>

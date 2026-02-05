@@ -6,7 +6,7 @@ import MovieCard from './MovieCard';
 interface MovieListProps {
   movies: Movie[];
   title: string;
-  category?: { emoji: string; label: string };
+  category?: { emoji: string; label: string; tagClass: string };
 }
 
 export default function MovieList({ movies, title, category }: MovieListProps) {
@@ -26,7 +26,7 @@ export default function MovieList({ movies, title, category }: MovieListProps) {
             {title}
           </h2>
           {title && (
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300">
+            <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold ${category?.tagClass || 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300'}`}>
               {movies.length}
             </span>
           )}
