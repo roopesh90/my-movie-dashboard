@@ -20,7 +20,7 @@ export default async function Home() {
           <p className="text-lg text-gray-600 dark:text-gray-400">
             A personal collection of movies I&apos;ve watched and loved (or not).
           </p>
-          <span className="inline-flex items-center px-4 py-2 rounded-full text-lg font-bold bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-gray-100">
+          <span className="inline-flex items-center px-4 py-2 rounded-full text-lg font-bold bg-gray-200 dark:bg-gray-700 dark:text-gray-100">
             {totalMovies} movies
           </span>
         </div>
