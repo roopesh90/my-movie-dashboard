@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { useState } from 'react';
 import ClearCacheButton from './ClearCacheButton';
 
+const SITE_OWNER = process.env.NEXT_PUBLIC_SITE_OWNER || 'My';
 const categories = [
   { name: 'All', href: '/' },
   { name: 'Outstanding', href: '/outstanding' },
@@ -24,7 +25,7 @@ export default function Navigation() {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-8">
             <Link href="/" className="text-xl font-bold text-gray-900 dark:text-white">
-              🎬 Movie Archive
+              🎬 {SITE_OWNER}&apos;s Movie Archive
             </Link>
             
             <div className="hidden md:flex items-center gap-1">
