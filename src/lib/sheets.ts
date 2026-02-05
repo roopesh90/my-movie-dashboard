@@ -1,6 +1,7 @@
 import { Movie, MovieSheet, TMDBMovieDetails } from '@/types/movie';
 import languages from '@/data/languages.json';
 import { getTMDBCache, setTMDBCache } from './tmdbCache';
+import { categoryConfigMap } from './categoryConfig';
 
 // Configuration for your Google Sheet
 // Read from environment variables
@@ -17,10 +18,10 @@ if (!SHEET_ID) {
 
 // Sheet names/ranges for each category (includes column F for image URL)
 const SHEET_RANGES = {
-  outstanding: 'Outstanding!A2:F',
-  mediocre: 'Mediocre!A2:F',
-  shit: 'Shit!A2:F',
-  towatch: 'To Watch!A2:F',
+  outstanding: 'Outstanding!A1:F',
+  mediocre: 'Mediocre!A1:F',
+  shit: 'Shit!A1:F',
+  towatch: 'Yet to be Categorised!A1:F',
 };
 
 const languageLookup = new Map<string, string>(
@@ -466,11 +467,5 @@ export async function fetchAllMovies(): Promise<MovieSheet[]> {
 }
 
 function getCategoryTitle(category: keyof typeof SHEET_RANGES): string {
-  const titles = {
-    outstanding: 'Outstanding',
-    mediocre: 'Mediocre',
-    shit: 'Shit',
-    towatch: 'To Watch / Rewatch',
-  };
-  return titles[category];
+  return categoryConfigMap[category]?.title ?? category;
 }
