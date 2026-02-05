@@ -4,6 +4,7 @@ import { Movie } from '@/types/movie';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import CachedImage from './CachedImage';
 
 interface MovieCardProps {
   movie: Movie;
@@ -162,17 +163,16 @@ export default function MovieCard({ movie, index }: MovieCardProps) {
             <span className="text-gray-500 dark:text-gray-400 w-20">Theme:</span>
             <span className="text-gray-700 dark:text-gray-300">{movie.theme}</span>
           </div>
-
-          {movie.comment && (
-            <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
-              <p className="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wide mb-2">
-                {movie.commentLabel || 'Comments'}
-              </p>
-              <blockquote className="rounded-lg border-l-4 border-blue-500/70 bg-blue-50/60 dark:bg-blue-900/20 p-3 text-sm italic text-gray-700 dark:text-gray-200">
-                &ldquo;{movie.comment}&rdquo;
-              </blockquote>
-            </div>
-          )}
+          
+					<div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
+						<p className="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wide mb-2">
+							{movie.commentLabel || 'Comments'}
+						</p>
+						<blockquote className="rounded-lg border-l-4 border-blue-500/70 bg-blue-50/60 dark:bg-blue-900/20 p-3 text-sm italic text-gray-700 dark:text-gray-200">
+							&ldquo;{movie.comment}&rdquo;
+						</blockquote>
+					</div>
+          
         </div>
       </div>
 
@@ -373,7 +373,7 @@ export default function MovieCard({ movie, index }: MovieCardProps) {
                             onClick={() => setPlayingVideo({ key: video.key, site: video.site, name: video.name })}
                             className="relative flex-shrink-0 w-40 h-24 rounded-lg overflow-hidden group cursor-pointer"
                           >
-                            <img
+                            <CachedImage
                               src={`https://img.youtube.com/vi/${video.key}/mqdefault.jpg`}
                               alt={video.name}
                               className="w-full h-full object-cover"
@@ -399,7 +399,7 @@ export default function MovieCard({ movie, index }: MovieCardProps) {
                             onClick={() => setViewingImage(image.filePath)}
                             className="relative flex-shrink-0 w-40 h-24 rounded-lg overflow-hidden group cursor-pointer"
                           >
-                            <img
+                            <CachedImage
                               src={image.filePath}
                               alt={`${image.type} ${idx + 1}`}
                               className="w-full h-full object-cover"
@@ -494,7 +494,7 @@ export default function MovieCard({ movie, index }: MovieCardProps) {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
-            <img
+            <CachedImage
               src={viewingImage}
               alt="Movie media"
               className="max-w-full max-h-[90vh] object-contain rounded-lg"
