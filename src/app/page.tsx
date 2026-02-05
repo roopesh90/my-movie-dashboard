@@ -1,6 +1,8 @@
 import { fetchAllMovies } from '@/lib/sheets';
 import MovieList from '@/components/MovieList';
 
+const SITE_OWNER = process.env.NEXT_PUBLIC_SITE_OWNER || 'My';
+
 export const revalidate = 0; // Disable caching for fresh data
 
 export default async function Home() {
@@ -10,7 +12,7 @@ export default async function Home() {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-          🎬 My Movie Archive
+          🎬 {SITE_OWNER}&apos;s Movie Archive
         </h1>
         <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
           A personal collection of movies I&apos;ve watched and loved (or not).
