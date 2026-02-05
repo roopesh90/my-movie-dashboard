@@ -15,9 +15,14 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const SITE_OWNER = process.env.NEXT_PUBLIC_SITE_OWNER || 'My';
+
 export const metadata: Metadata = {
-  title: "Movie Archive - Personal Collection",
-  description: "My personal movie archive and recommendations",
+  title: `🎬 ${SITE_OWNER}'s Movie Archive`,
+  description: "A personal collection of movies I've watched and loved (or not). Browse by category to see what I recommend.",
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({
