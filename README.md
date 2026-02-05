@@ -12,6 +12,8 @@ A personal movie archive dashboard that fetches data from Google Sheets and disp
 - 🚀 Built with Next.js 14 App Router
 - ⚡ TypeScript for type safety
 - 🖼️ Movie poster images (from sheet or TMDB)
+- ⚡ 10-day browser caching for movie images
+- 🧹 Built-in cache management tools
 
 ## Movie Categories
 
@@ -98,6 +100,41 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 npm run build
 npm start
 \`\`\`
+
+## Performance & Caching
+
+### Browser Image Caching
+
+Movie poster images are automatically cached in your browser for **10 days** to improve performance:
+
+- **First load**: Images downloaded from TMDB
+- **Subsequent loads**: Images served from browser cache
+- **After 10 days**: Cache expires and fresh images are fetched
+- **No storage limits**: Uses standard browser caching, not localStorage
+
+### Clearing Cache
+
+If you need to refresh cached images (e.g., if TMDB updates posters):
+
+1. Click the **⚙️ Cache** button in the navigation bar
+2. Choose one of these options:
+   - **Clear Image Cache**: Removes only cached movie posters
+   - **Clear All Cache**: Removes all application cache and resets the app
+3. The page will automatically refresh after clearing
+
+### Manual Cache Management
+
+You can also clear cache programmatically:
+
+```typescript
+import { clearImageCache, clearApplicationCache } from '@/lib/cache';
+
+// Clear only image cache
+await clearImageCache();
+
+// Clear everything
+await clearApplicationCache();
+```
 
 ## Deployment on Vercel
 

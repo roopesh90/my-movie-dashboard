@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { useState } from 'react';
+import ClearCacheButton from './ClearCacheButton';
 
 const categories = [
   { name: 'All', href: '/' },
@@ -14,6 +16,7 @@ const categories = [
 
 export default function Navigation() {
   const pathname = usePathname();
+  const [showCacheMenu, setShowCacheMenu] = useState(false);
 
   return (
     <nav className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
@@ -54,11 +57,32 @@ export default function Navigation() {
               })}
             </div>
           </div>
+
+          {/* Cache menu */}
+          <div className="relative">
+            <button
+              onClick={() => setShowCacheMenu(!showCacheMenu)}
+              className="px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+              title="Manage browser cache"
+            >
+              ⚙️ Cache
+            </button>
+
+            {showCacheMenu && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="absolute right-0 mt-2 bg-white dark:bg-gray-700 rounded-lg shadow-lg border border-gray-200 dark:border-gray-600 p-4 z-50 min-w-max"
+              >
+                <ClearCacheButton />
+              </motion.div>
+            )}
+          </div>
         </div>
         
         {/* Mobile menu */}
         <div className="md:hidden pb-3">
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 mb-3">
             {categories.map((category) => {
               const isActive = pathname === category.href;
               return (
@@ -76,6 +100,24 @@ export default function Navigation() {
               );
             })}
           </div>
+
+          {/* Mobile cache menu */}
+          <button
+            onClick={() => setShowCacheMenu(!showCacheMenu)}
+            className="w-full px-3 py-2 text-sm font-medium text-left bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded transition-colors"
+          >
+            ⚙️ Manage Cache
+          </button>
+
+          {showCacheMenu && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              className="mt-2 p-3 bg-gray-100 dark:bg-gray-700 rounded"
+            >
+              <ClearCacheButton />
+            </motion.div>
+          )}
         </div>
       </div>
     </nav>
