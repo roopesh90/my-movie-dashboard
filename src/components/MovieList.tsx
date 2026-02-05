@@ -6,9 +6,10 @@ import MovieCard from './MovieCard';
 interface MovieListProps {
   movies: Movie[];
   title: string;
+  category?: { emoji: string; label: string };
 }
 
-export default function MovieList({ movies, title }: MovieListProps) {
+export default function MovieList({ movies, title, category }: MovieListProps) {
   if (movies.length === 0) {
     return (
       <div className="text-center py-12">
@@ -30,7 +31,7 @@ export default function MovieList({ movies, title }: MovieListProps) {
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {movies.map((movie, index) => (
-          <MovieCard key={`${movie.name}-${index}`} movie={movie} index={index} />
+          <MovieCard key={`${movie.name}-${index}`} movie={movie} index={index} category={category} />
         ))}
       </div>
     </div>
