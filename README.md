@@ -11,6 +11,7 @@ A personal movie archive dashboard that fetches data from Google Sheets and disp
 - 📱 Fully responsive design
 - 🚀 Built with Next.js 14 App Router
 - ⚡ TypeScript for type safety
+- 🖼️ Movie poster images (from sheet or TMDB)
 
 ## Movie Categories
 
@@ -35,6 +36,7 @@ A personal movie archive dashboard that fetches data from Google Sheets and disp
    - Year
    - Theme
    - Comment
+   - Image (optional - paste image URL here)
 
 3. Make your sheet **publicly viewable**:
    - Click "Share" button
@@ -42,9 +44,38 @@ A personal movie archive dashboard that fetches data from Google Sheets and disp
    - Copy the Sheet ID from the URL (the long string between `/d/` and `/edit`)
 
 ### 2. Configure the App
+Create a `.env` file by copying `.env.example`:
+   ```bash
+   cp .env.example .env
+   ```
 
-1. Open `src/lib/sheets.ts`
-2. Replace `YOUR_GOOGLE_SHEET_ID_HERE` with your actual Google Sheet ID
+2. Update `.env` with your configuration:
+   ```
+   NEXT_PUBLIC_SHEET_ID=your_actual_sheet_id
+   NEXT_PUBLIC_TMDB_API_KEY=optional_tmdb_api_key
+   ```
+
+3. If your sheet tab names are different, update the `SHEET_RANGES` in `src/lib/sheets.ts`
+
+### 3. Movie Images (Optional)
+
+**Option A: Manual Images (Recommended)**
+- Add image URLs directly in the "Image" column (F) of your Google Sheet
+- You can get movie poster URLs from:
+  - Google Images (copy image URL)
+  - TMDB: https://www.themoviedb.org/movie/[id]
+  - IMDb, or any other source
+
+**Option B: Auto-fetch from TMDB**
+- Sign up for free at https://www.themoviedb.org/settings/api
+- Add your API key to `.env`: `NEXT_PUBLIC_TMDB_API_KEY=your_key`
+- Leave the Image column empty and the app will auto-fetch posters
+- The app searches by movie name, so accuracy depends on exact titles
+
+**Option C: Hybrid (Best of Both)**
+- Add URLs manually where you want specific images
+- Leave blank for others and TMDB will auto-fill them
+- Get the best of both approaches!
 3. If your sheet tab names are different, update the `SHEET_RANGES` object
 
 ### 3. Install Dependencies
@@ -118,14 +149,30 @@ If you want different columns, update:
 - **Styling**: Tailwind CSS v4
 - **Animations**: Framer Motion
 - **Data Source**: Google Sheets (Visualization API)
+- **Movie Images**: TMDB API (optional)
 - **Deployment**: Vercel
+
+## Attribution
+
+This project uses **The Movie Database (TMDB) API** for fetching movie poster images and data.
+
+> This product uses the TMDB API but is not endorsed or certified by TMDB.
+
+If you use TMDB data or images in your deployment, please follow their [attribution guidelines](https://www.themoviedb.org/about/logos-attribution). The app includes an attribution footer by default.
+
+### Using TMDB Responsibly
+
+- **Personal Use**: Free tier is perfect for personal projects
+- **Attribution**: Always credit TMDB when using their data
+- **Logo Usage**: See [TMDB Attribution Guidelines](https://www.themoviedb.org/about/logos-attribution) for proper logo usage
+- **API Terms**: Respect their rate limits and terms of service
 
 ## Notes
 
 - The app fetches fresh data from Google Sheets on every page load (`revalidate: 0`)
-- No authentication required - uses Google Visualization API
+- TMDB image fetching is automatic and optional
 - Perfect for personal use and sharing with friends/family
-- Data is cached during build in production
+- Includes proper TMDB attribution footer
 
 ## License
 
