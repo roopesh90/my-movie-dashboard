@@ -2,7 +2,7 @@ import { fetchMoviesFromSheet } from '@/lib/sheets';
 import MovieList from '@/components/MovieList';
 import { categoryConfigMap } from '@/lib/categoryConfig';
 
-export const revalidate = 0; // Disable caching for fresh data
+export const revalidate = 300; // ISR: Revalidate every 5 minutes
 
 export default async function OutstandingPage() {
   const movies = await fetchMoviesFromSheet('outstanding');

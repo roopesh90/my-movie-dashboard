@@ -4,7 +4,7 @@ import { categoryConfigMap } from '@/lib/categoryConfig';
 
 const SITE_OWNER = process.env.NEXT_PUBLIC_SITE_OWNER || 'My';
 
-export const revalidate = 0; // Disable caching for fresh data
+export const revalidate = 300; // ISR: Revalidate every 5 minutes
 
 export default async function Home() {
   const movieSheets = await fetchAllMovies();
