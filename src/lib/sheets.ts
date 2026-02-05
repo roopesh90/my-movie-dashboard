@@ -1,8 +1,15 @@
 import { Movie, MovieSheet } from '@/types/movie';
 
 // Configuration for your Google Sheet
-// Replace with your actual Google Sheet ID
-const SHEET_ID = 'YOUR_GOOGLE_SHEET_ID_HERE';
+// Read from environment variables
+const SHEET_ID = process.env.NEXT_PUBLIC_SHEET_ID;
+
+// Validate that SHEET_ID is configured
+if (!SHEET_ID) {
+  throw new Error(
+    'NEXT_PUBLIC_SHEET_ID environment variable is not set. Please check your .env file.'
+  );
+}
 
 // Sheet names/ranges for each category
 const SHEET_RANGES = {
