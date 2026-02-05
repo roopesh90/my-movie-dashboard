@@ -119,11 +119,25 @@ async function fetchTMDBMovieData(
       return {};
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const data = await response.json() as any;
+    interface TMDBSearchResult {
+      id: number;
+      title?: string;
+      original_title?: string;
+      poster_path?: string;
+      release_date?: string;
+      original_language?: string;
+      overview?: string;
+      vote_average?: number;
+      vote_count?: number;
+      backdrop_path?: string;
+      popularity?: number;
+      external_ids?: { imdb_id?: string };
+    }
+
+    const data = (await response.json()) as { results?: TMDBSearchResult[] };
     
     // Try to find the best match based on original_language and release year if provided
-    const results: any[] = Array.isArray(data.results) ? data.results : [];
+    const results = Array.isArray(data.results) ? data.results : [];
     const normalizedYear = year && /^\d{4}$/.test(year) ? year : null;
     const normalizedLanguage = languageCode || null;
 
@@ -164,7 +178,7 @@ async function fetchTMDBMovieData(
       : undefined;
 
     // Fetch videos from the videos endpoint
-    let videos: any[] = [];
+    let videos: Array<{ id: string; key: string; name: string; site: string; type: string; official: boolean; publishedAt?: string }> = [];
     try {
       const videosUrl = `https://api.themoviedb.org/3/movie/${movie.id}/videos?language=en-US`;
       const videosResponse = await fetchWithRetry(videosUrl, {
@@ -174,12 +188,12 @@ async function fetchTMDBMovieData(
         },
       });
       
-      if (videosResponse.ok) {
-        const videosData = await videosResponse.json() as any;
+      if (videosResponse && videosResponse.ok) {
+        const videosData = (await videosResponse.json()) as { results?: Array<{ id: string; key: string; name?: string; site: string; type: string; official?: boolean; published_at?: string }> };
         videos = Array.isArray(videosData.results)
           ? videosData.results
-              .filter((v: any) => (v.site === 'YouTube' || v.site === 'Vimeo') && v.key)
-              .map((v: any) => ({
+              .filter((v) => (v.site === 'YouTube' || v.site === 'Vimeo') && v.key)
+              .map((v) => ({
                 id: v.id,
                 key: v.key,
                 name: v.name || '',
@@ -188,7 +202,7 @@ async function fetchTMDBMovieData(
                 official: v.official === true,
                 publishedAt: v.published_at || undefined,
               }))
-              .sort((a: any, b: any) => {
+              .sort((a, b) => {
                 // Prioritize: official trailers > trailers > teasers > others
                 const typeOrder: Record<string, number> = {
                   Trailer: a.official ? 1 : 2,
@@ -205,7 +219,7 @@ async function fetchTMDBMovieData(
     }
 
     // Fetch images from the images endpoint
-    let images: any[] = [];
+    let images: Array<{ filePath: string; aspectRatio: number; height: number; width: number; type: 'backdrop' | 'poster' }> = [];
     try {
       const imagesUrl = `https://api.themoviedb.org/3/movie/${movie.id}/images`;
       const imagesResponse = await fetchWithRetry(imagesUrl, {
@@ -215,10 +229,10 @@ async function fetchTMDBMovieData(
         },
       });
       
-      if (imagesResponse.ok) {
-        const imagesData = await imagesResponse.json() as any;
+      if (imagesResponse && imagesResponse.ok) {
+        const imagesData = (await imagesResponse.json()) as { backdrops?: Array<{ file_path: string; aspect_ratio?: number; height?: number; width?: number }>; posters?: Array<{ file_path: string; aspect_ratio?: number; height?: number; width?: number }> };
         const backdrops = Array.isArray(imagesData.backdrops)
-          ? imagesData.backdrops.slice(0, 5).map((img: any) => ({
+          ? imagesData.backdrops.slice(0, 5).map((img) => ({
               filePath: `https://image.tmdb.org/t/p/w780${img.file_path}`,
               aspectRatio: img.aspect_ratio || 1.78,
               height: img.height || 0,
@@ -227,7 +241,7 @@ async function fetchTMDBMovieData(
             }))
           : [];
         const posters = Array.isArray(imagesData.posters)
-          ? imagesData.posters.slice(0, 3).map((img: any) => ({
+          ? imagesData.posters.slice(0, 3).map((img) => ({
               filePath: `https://image.tmdb.org/t/p/w500${img.file_path}`,
               aspectRatio: img.aspect_ratio || 0.67,
               height: img.height || 0,
@@ -402,13 +416,12 @@ export async function fetchMoviesFromSheet(
     const data = JSON.parse(jsonString);
 
     // Parse rows into Movie objects
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const movies: Movie[] = await Promise.all(
-      data.table.rows.map(async (row: any) => {
-        const sheetImageUrl = row.c[5]?.v || ''; // Column F for image URL
-        const movieName = row.c[0]?.v || '';
-        const language = row.c[1]?.v || '';
-        const year = row.c[2]?.v?.toString() || '';
+      data.table.rows.map(async (row: { c: Array<{ v?: string | number | boolean | null }> }) => {
+        const sheetImageUrl = (row.c[5]?.v || '') as string; // Column F for image URL
+        const movieName = (row.c[0]?.v || '') as string;
+        const language = (row.c[1]?.v || '') as string;
+        const year = (row.c[2]?.v?.toString() || '') as string;
 
         const tmdbData = movieName
           ? await fetchTMDBMovieData(movieName, language, year)
