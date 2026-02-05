@@ -183,7 +183,10 @@ export default function MovieCard({ movie, index }: MovieCardProps) {
           aria-modal="true"
           aria-labelledby={`movie-title-${modalId}`}
           aria-describedby={`movie-overview-${modalId}`}
-          onClick={() => setIsModalOpen(false)}
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent bubbling to card's onClick
+            setIsModalOpen(false);
+          }}
         >
           <div
             className="bg-white dark:bg-gray-900 rounded-xl shadow-xl w-[90vw] sm:w-[80vw] lg:w-[60vw] max-h-[90vh] overflow-hidden flex flex-col"
