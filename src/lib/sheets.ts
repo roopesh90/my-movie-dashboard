@@ -1,5 +1,5 @@
 import { cache } from 'react';
-import { Movie, MovieSheet, TMDBMovieDetails } from '@/types/movie';
+import { Movie, MovieSheet, TMDBMovieDetails, MovieCategory } from '@/types/movie';
 import languages from '@/data/languages.json';
 import { getTMDBCache, setTMDBCache } from './tmdbCache';
 import { categoryConfigMap } from './categoryConfig';
@@ -18,12 +18,14 @@ if (!SHEET_ID) {
 }
 
 // Sheet names/ranges for each category (includes column F for image URL)
-const SHEET_RANGES = {
-  outstanding: 'Outstanding!A1:F',
-  mediocre: 'Mediocre!A1:F',
-  shit: 'Shit!A1:F',
-  towatch: 'Yet to be Categorised!A1:F',
-};
+// Generated dynamically from categoryConfigMap
+const SHEET_RANGES = Object.entries(categoryConfigMap).reduce(
+  (acc, [key, config]) => {
+    acc[key as keyof typeof categoryConfigMap] = `${config.sheetName}!${config.range}`;
+    return acc;
+  },
+  {} as Record<string, string>
+);
 
 const languageLookup = new Map<string, string>(
   languages.flatMap((lang) => [
@@ -472,7 +474,7 @@ async function fetchAllMoviesImpl(): Promise<MovieSheet[]> {
     categories.map(async (category) => {
       const movies = await fetchMoviesFromSheet(category);
       return {
-        category,
+        category: category as MovieCategory,
         title: getCategoryTitle(category),
         movies,
       };
