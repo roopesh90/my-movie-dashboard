@@ -13,9 +13,14 @@ export default async function OutstandingPage() {
         <div className={`inline-block px-3 py-1 mb-4 text-sm font-semibold rounded-full ${categoryConfigMap.outstanding.tagClass}`}>
           {categoryConfigMap.outstanding.emoji} {categoryConfigMap.outstanding.label}
         </div>
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-          {categoryConfigMap.outstanding.title}
-        </h1>
+        <div className="flex items-center gap-4 mb-4">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+            {categoryConfigMap.outstanding.title}
+          </h1>
+          <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100">
+            {movies.length}
+          </span>
+        </div>
         <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl">
           These are the movies that left a lasting impression. The ones I&apos;d recommend without hesitation.
         </p>

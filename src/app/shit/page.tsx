@@ -13,9 +13,14 @@ export default async function ShitPage() {
         <div className={`inline-block px-3 py-1 mb-4 text-sm font-semibold rounded-full ${categoryConfigMap.shit.tagClass}`}>
           {categoryConfigMap.shit.emoji} {categoryConfigMap.shit.label}
         </div>
-        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-          {categoryConfigMap.shit.title}
-        </h1>
+        <div className="flex items-center gap-4 mb-4">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white">
+            {categoryConfigMap.shit.title}
+          </h1>
+          <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-bold bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100">
+            {movies.length}
+          </span>
+        </div>
         <p className="text-lg text-gray-600 dark:text-gray-400 max-w-3xl">
           Save yourself the time. These didn&apos;t work for me.
         </p>
