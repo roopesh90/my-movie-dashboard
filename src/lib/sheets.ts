@@ -1,5 +1,6 @@
 import { Movie, MovieSheet, TMDBMovieDetails } from '@/types/movie';
 import languages from '@/data/languages.json';
+import { getTMDBCache, setTMDBCache } from './tmdbCache';
 
 // Configuration for your Google Sheet
 // Read from environment variables
@@ -21,11 +22,6 @@ const SHEET_RANGES = {
   shit: 'Shit!A2:F',
   towatch: 'To Watch!A2:F',
 };
-
-const tmdbSearchCache = new Map<
-  string,
-  { imageUrl?: string; details?: TMDBMovieDetails }
->();
 
 const languageLookup = new Map<string, string>(
   languages.flatMap((lang) => [
@@ -74,7 +70,9 @@ async function fetchTMDBMovieData(
   try {
     const languageCode = language ? getLanguageCode(language) : null;
     const cacheKey = `${movieName.toLowerCase()}|${languageCode || 'any'}|${year || 'any'}`;
-    const cached = tmdbSearchCache.get(cacheKey);
+    
+    // Check cache first
+    const cached = getTMDBCache(cacheKey);
     if (cached) {
       return cached;
     }
@@ -108,6 +106,11 @@ async function fetchTMDBMovieData(
         'Content-Type': 'application/json;charset=utf-8',
       },
     });
+
+    if (!response) {
+      console.warn(`Failed to fetch TMDB data for "${movieName}" - network error`);
+      return {};
+    }
 
     if (!response.ok) {
       const errorData = await response.json() as { status_message?: string };
@@ -264,10 +267,12 @@ async function fetchTMDBMovieData(
     }
 
     const result = { imageUrl, details };
-    tmdbSearchCache.set(cacheKey, result);
+    setTMDBCache(cacheKey, result);
     return result;
   } catch (error) {
-    console.error(`Error fetching TMDB image for "${movieName}":`, error);
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    console.warn(`⚠️ Could not fetch TMDB data for "${movieName}": ${errorMsg}`);
+    // Return empty object to gracefully handle missing TMDB data
     return {};
   }
 }
@@ -277,7 +282,7 @@ async function fetchWithRetry(
   options: RequestInit,
   retries = 2,
   timeoutMs = 8000
-): Promise<Response> {
+): Promise<Response | null> {
   let lastError: unknown;
 
   for (let attempt = 0; attempt <= retries; attempt += 1) {
@@ -302,10 +307,13 @@ async function fetchWithRetry(
         (message.includes('ECONNRESET') ||
           message.includes('ETIMEDOUT') ||
           message.includes('network') ||
-          message.includes('fetch failed'));
+          message.includes('fetch failed') ||
+          message.includes('aborted'));
 
       if (!shouldRetry) {
-        throw error;
+        // Log warning instead of throwing
+        console.warn(`Fetch failed after ${attempt + 1} attempts:`, message);
+        return null;
       }
 
       const backoffMs = 250 * Math.pow(2, attempt);
@@ -313,7 +321,10 @@ async function fetchWithRetry(
     }
   }
 
-  throw lastError instanceof Error ? lastError : new Error('Unknown fetch error');
+  // Return null instead of throwing
+  const errorMsg = lastError instanceof Error ? lastError.message : 'Unknown fetch error';
+  console.warn(`Fetch failed after ${retries + 1} attempts:`, errorMsg);
+  return null;
 }
 
 /**

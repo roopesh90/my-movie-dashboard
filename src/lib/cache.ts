@@ -3,34 +3,35 @@
  * Helps manage application cache including movie images
  */
 
+import { clearTMDBCache, getTMDBCacheStats, cleanupExpiredCache as cleanupExpiredTMDBCache } from './tmdbCache';
+import {
+  clearImageCache as clearFrontendImageCache,
+  getImageCacheStats,
+  cleanupExpiredImages,
+} from './imageCache';
+
 /**
  * Clear all application cache from browser
- * This includes service worker cache and browser cache
+ * Only clears app-specific caches, not all browser caches
  */
 export async function clearApplicationCache(): Promise<void> {
   try {
-    // Clear all caches from service workers
-    if ('caches' in window) {
-      const cacheNames = await caches.keys();
-      await Promise.all(
-        cacheNames.map((cacheName) => caches.delete(cacheName))
-      );
-      console.log('✓ Service worker caches cleared');
-    }
+    // Clear only our specific caches
+    await clearFrontendImageCache();
+    clearTMDBCache();
 
-    // Clear localStorage if you're using it
+    // Clear localStorage and sessionStorage
     if ('localStorage' in window) {
       localStorage.clear();
       console.log('✓ LocalStorage cleared');
     }
 
-    // Clear sessionStorage
     if ('sessionStorage' in window) {
       sessionStorage.clear();
       console.log('✓ SessionStorage cleared');
     }
 
-    console.log('✓ All caches cleared successfully');
+    console.log('✓ All application caches cleared successfully');
   } catch (error) {
     console.error('Error clearing cache:', error);
     throw error;
@@ -43,18 +44,25 @@ export async function clearApplicationCache(): Promise<void> {
  */
 export async function clearImageCache(): Promise<void> {
   try {
-    if ('caches' in window) {
-      // Clear image-specific cache
-      const imageCache = await caches.open('images');
-      const requests = await imageCache.keys();
-      await Promise.all(
-        requests.map((request) => imageCache.delete(request))
-      );
-      console.log(`✓ Cleared ${requests.length} cached images`);
-    }
+    await clearFrontendImageCache();
   } catch (error) {
     console.error('Error clearing image cache:', error);
     throw error;
+  }
+}
+
+/**
+ * Cleanup expired entries from all caches
+ */
+export async function cleanupAllExpiredCache(): Promise<void> {
+  try {
+    await cleanupExpiredImages();
+    cleanupExpiredTMDBCache();
+    
+    const tmdbStats = getTMDBCacheStats();
+    console.log(`✓ Cleaned up expired cache entries. TMDB: ${tmdbStats.validEntries} valid entries remaining`);
+  } catch (error) {
+    console.error('Error cleaning up expired cache:', error);
   }
 }
 
@@ -64,28 +72,41 @@ export async function clearImageCache(): Promise<void> {
 export async function getCacheStats(): Promise<{
   totalCaches: number;
   imageCount: number;
+  imageCacheSize?: number;
+  tmdbCache?: {
+    totalEntries: number;
+    validEntries: number;
+    expiredEntries: number;
+    cacheDurationHours: number;
+    cacheEnabled: boolean;
+  };
 }> {
   try {
-    let imageCount = 0;
     let totalCaches = 0;
 
     if ('caches' in window) {
       const cacheNames = await caches.keys();
       totalCaches = cacheNames.length;
-
-      for (const cacheName of cacheNames) {
-        const cache = await caches.open(cacheName);
-        const requests = await cache.keys();
-        imageCount += requests.filter((req) => {
-          const url = req.url.toLowerCase();
-          return url.includes('image') || url.includes('.jpg') || url.includes('.png');
-        }).length;
-      }
     }
 
-    return { totalCaches, imageCount };
+    const imageStats = await getImageCacheStats();
+    const tmdbCache = getTMDBCacheStats();
+
+    return {
+      totalCaches,
+      imageCount: imageStats.totalImages,
+      imageCacheSize: imageStats.cacheSize,
+      tmdbCache,
+    };
   } catch (error) {
     console.error('Error getting cache stats:', error);
     return { totalCaches: 0, imageCount: 0 };
   }
+}
+
+/**
+ * Clear TMDB API response cache
+ */
+export function clearTMDBAPICache(): void {
+  clearTMDBCache();
 }
