@@ -9,7 +9,7 @@ import CachedImage from './CachedImage';
 interface MovieCardProps {
   movie: Movie;
   index: number;
-  category?: { emoji: string; label: string };
+  category?: { emoji: string; label: string; tagClass: string };
 }
 
 export default function MovieCard({ movie, index, category }: MovieCardProps) {
