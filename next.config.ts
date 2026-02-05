@@ -38,6 +38,11 @@ const nextConfig: NextConfig = {
         hostname: "www.themoviedb.org",
         pathname: "/assets/**",
       },
+      {
+        protocol: "https",
+        hostname: "img.youtube.com",
+        pathname: "/**",
+      },
     ],
     // Cache TMDB images for 10 days
     minimumCacheTTL: 864000,
