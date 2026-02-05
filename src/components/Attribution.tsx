@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import { APP_VERSION } from '@/lib/version';
 
 export default function Attribution() {
   return (
@@ -58,6 +59,13 @@ export default function Attribution() {
             >
               TMDB Attribution Guidelines & Logos
             </a>
+          </div>
+
+          {/* Version Info */}
+          <div className="text-center pt-4 border-t border-gray-200 dark:border-gray-700">
+            <p className="text-xs text-gray-400 dark:text-gray-600">
+              Movie Archive Dashboard v{APP_VERSION}
+            </p>
           </div>
         </div>
       </div>
