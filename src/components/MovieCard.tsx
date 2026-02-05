@@ -9,9 +9,18 @@ import CachedImage from './CachedImage';
 interface MovieCardProps {
   movie: Movie;
   index: number;
+  category?: { emoji: string; label: string };
 }
 
-export default function MovieCard({ movie, index }: MovieCardProps) {
+export default function MovieCard({ movie, index, category }: MovieCardProps) {
+  const getCommentPreview = (text: string) => {
+    const trimmed = text.trim();
+    if (!trimmed) return '';
+    const words = trimmed.split(/\s+/);
+    if (words.length <= 6) return trimmed;
+    return `${words.slice(0, 6).join(' ')}…`;
+  };
+
   const [imageError, setImageError] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [playingVideo, setPlayingVideo] = useState<{ key: string; site: string; name: string } | null>(null);
@@ -146,7 +155,14 @@ export default function MovieCard({ movie, index }: MovieCardProps) {
       )}
 
       <div className="p-5 flex flex-col flex-grow">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">{movie.name}</h3>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{movie.name}</h3>
+          {category && (
+            <span className={`text-sm px-3 py-1 rounded-full font-semibold whitespace-nowrap ml-2 ${category.tagClass}`}>
+              {category.emoji} {category.label}
+            </span>
+          )}
+        </div>
 
         <div className="space-y-1.5 text-sm flex-grow">
           <div className="flex items-center gap-2">
@@ -164,14 +180,16 @@ export default function MovieCard({ movie, index }: MovieCardProps) {
             <span className="text-gray-700 dark:text-gray-300">{movie.theme}</span>
           </div>
           
-					<div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
-						<p className="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wide mb-2">
-							{movie.commentLabel || 'Comments'}
-						</p>
-						<blockquote className="rounded-lg border-l-4 border-blue-500/70 bg-blue-50/60 dark:bg-blue-900/20 p-3 text-sm italic text-gray-700 dark:text-gray-200">
-							&ldquo;{movie.comment}&rdquo;
-						</blockquote>
-					</div>
+          {movie.comment && (
+            <div className="mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
+              <p className="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wide mb-2">
+                {movie.commentLabel || 'Comments'}
+              </p>
+              <blockquote className="rounded-lg border-l-4 border-blue-500/70 bg-blue-50/60 dark:bg-blue-900/20 p-3 text-sm italic text-gray-700 dark:text-gray-200 line-clamp-2">
+                &ldquo;{getCommentPreview(movie.comment)}&rdquo;
+              </blockquote>
+            </div>
+          )}
           
         </div>
       </div>
@@ -194,12 +212,19 @@ export default function MovieCard({ movie, index }: MovieCardProps) {
           >
             <div className="flex items-start justify-between p-6 border-b border-gray-100 dark:border-gray-800">
               <div>
-                <h2
-                  id={`movie-title-${modalId}`}
-                  className="text-2xl font-semibold text-gray-900 dark:text-white"
-                >
-                  {details?.title || movie.name}
-                </h2>
+                <div className="flex items-center gap-3 mb-2">
+                  <h2
+                    id={`movie-title-${modalId}`}
+                    className="text-2xl font-semibold text-gray-900 dark:text-white"
+                  >
+                    {details?.title || movie.name}
+                  </h2>
+                  {category && (
+                    <span className={`text-sm px-3 py-1 rounded-full font-semibold whitespace-nowrap ${category.tagClass}`}>
+                      {category.emoji} {category.label}
+                    </span>
+                  )}
+                </div>
                 {details?.tagline && (
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">{details.tagline}</p>
                 )}
@@ -420,16 +445,20 @@ export default function MovieCard({ movie, index }: MovieCardProps) {
                     </div>
                   )}
 
-                  {movie.comment && (
-                    <div className="pt-2 border-t border-gray-100 dark:border-gray-800">
-                      <p className="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wide mb-2">
-                        {movie.commentLabel || 'Comments'}
-                      </p>
-                      <blockquote className="rounded-lg border-l-4 border-blue-500/70 bg-blue-50/60 dark:bg-blue-900/20 p-3 text-sm italic text-gray-700 dark:text-gray-200">
-                        &ldquo;{movie.comment}&rdquo;
-                      </blockquote>
-                    </div>
-                  )}
+                  <div className="pt-2 border-t border-gray-100 dark:border-gray-800">
+                    <p className="text-gray-500 dark:text-gray-400 text-xs uppercase tracking-wide mb-2">
+                      {movie.commentLabel || 'Comments'}
+                    </p>
+                    <blockquote className="rounded-lg border-l-4 border-blue-500/70 bg-blue-50/60 dark:bg-blue-900/20 p-3 text-sm italic text-gray-700 dark:text-gray-200">
+                      {movie.comment ? (
+                        <>&ldquo;{movie.comment}&rdquo;</>
+                      ) : (
+                        <span className="text-gray-500 dark:text-gray-400">
+                          Your thoughts deserve to be captured. What made this movie memorable?
+                        </span>
+                      )}
+                    </blockquote>
+                  </div>
                 </div>
               </div>
             </div>
